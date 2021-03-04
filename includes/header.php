@@ -20,7 +20,20 @@ and open the template in the editor.
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link href="/edsa-s-report/includes/styles.css" rel="stylesheet" type="text/css" />
+    <link href="/edsa-s-report/includes/styles.css" rel="stylesheet" type="text/css"/>
 </head>
+<nav class="navbar navbar-expand-sm bg-light navbar-light">
+    <ul class="navbar-nav">
+        <li class="nav-item active">
+            <a class="nav-link" href="/edsa-s-report/index.php">Accueil</a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="#">Prestations</a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="#">Données</a>
+        </li>
+    </ul>
+</nav>
 
 <body>

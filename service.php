@@ -2,14 +2,15 @@
     include_once 'includes/bdd.php';
     include_once 'includes/header.php';
     $client = $_GET['client'];
-    $date = $_GET['date'];
+    $date_from = $_GET['date_from'];
+    $date_to = $_GET['date_to'];
     $req = "SELECT *
             FROM context";
     $res = $pdo->query($req);
     $context = $res->fetchAll();
 ?>
+    <center>
     <div class="container-fluid">
-        <div class="row">
             <div class="col-3 select-position">
                 <select onchange="printValue(this.value)" class="form-control">
                     <option value="selected" selected>Choisir un contexte</option>
@@ -20,20 +21,21 @@
                         <?php } ?>
                 </select>
             </div>
-        </div>
-        <form action="" method="post">
+        <form action="script/traitementInsertService.php" method="post">
+            <input type="hidden" name="client" value="<?php echo $client ?>">
+            <input type="hidden" name="date_to" value="<?php echo $date_to ?>">
+            <input type="hidden" name="date_from" value="<?php echo $date_from ?>">
             <section id="service">
 
 
             </section>
-            <button id="btnAdd" class="hidden btn btn-primary btn-position">Valider</button>
+            <button id="btnAdd" class="hidden btn btn-primary ">Valider</button>
             <a href="index.php">
-                <button id="btnCancel" class="btn btn-primary btn-position">Annuler</button>
+                <button id="btnCancel" class="btn btn-primary ">Annuler</button>
             </a>
         </form>
-
-
     </div>
+    </center>
     <script>
         function printValue(val) {
             if (val == "selected") {
@@ -49,7 +51,7 @@
                         console.log(xmlHttp.responseText);
                     }
                 }
-                xmlHttp.open("post", "script/traitementService.php");
+                xmlHttp.open("post", "script/traitementAfficherService.php");
                 xmlHttp.send(formData);
             }
         }
