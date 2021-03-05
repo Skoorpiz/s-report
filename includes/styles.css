@@ -20,6 +20,8 @@ legend.custom-border {
     width: auto;
     padding: 0 10px;
     border-bottom: none;
+    font-size: 1.1em;
+    font-weight: bold;
 }
 
 .select-position {
@@ -33,7 +35,8 @@ legend.custom-border {
 }
 
 .entities {
-    padding-top: 2%;
+    margin : 0;
+    padding : 0;
 }
 .form-input{
     width: 50px;
