@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="83f92ee4-929f-4fc2-b8e1-1ea221c0e67d" name="syga" url="http://syga">
+        <fileTransfer rootFolder="/var/www/vhosts/cyga/httpdocs" accessType="SFTP" host="192.168.0.210" port="22" sshConfigId="0b8cc1de-bf60-413d-97a2-50aae5c2a709" sshConfig="syga">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

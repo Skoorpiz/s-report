@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="192.168.0.210" id="0b8cc1de-bf60-413d-97a2-50aae5c2a709" port="22" customName="syga" nameFormat="CUSTOM" username="root">
+        <option name="customName" value="syga" />
+      </sshConfig>
+    </configs>
+  </component>
+</project>

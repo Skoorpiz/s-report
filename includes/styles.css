@@ -1,16 +1,19 @@
+body {
+    overflow-x: hidden;
+    font-size: 12px;
+}
+
+
 input[type=text], H2 {
     margin-bottom: 10%;
 }
 
 .btn-index {
-    margin-top: 10%;
-    margin-left: 18%;
-
+    margin-top: 1%;
 }
 
 fieldset.custom-border {
     border: 1px groove #ddd !important;
-    padding: 0 1.4em 1.4em 1.4em !important;
     margin: 0 0 1.5em 0 !important;
     -webkit-box-shadow: 0px 0px 0px 0px #000;
     box-shadow: 0px 0px 0px 0px #000;
@@ -35,12 +38,192 @@ legend.custom-border {
 }
 
 .entities {
-    margin : 0;
-    padding : 0;
+    margin: 0;
+    padding: 0;
 }
-.form-input{
-    width: 50px;
+
+.form-input {
+    width: 42px !important;
 }
-.bold{
+
+.bold {
     font-weight: bold;
+}
+
+.background-home {
+    background-color: #eaeaea;
+}
+
+.btn-round {
+    border-radius: 30px;
+    font-style: italic;
+}
+
+.btn-blue {
+    background-color: #262163;
+    color: white;
+    width: 250px;
+    height: 50px;
+    font-size: x-large;
+}
+
+.btn-Service {
+    background-color: #262163;
+    color: white;
+}
+
+.btn-pink {
+    background-color: #ed008c;
+    color: white;
+    width: 350px;
+    height: 60px;
+    font-size: x-large;
+}
+
+.table-blue {
+    background-color: #262163;
+    color: white;
+    font-style: italic;
+}
+
+.btn:hover {
+    color: white;
+}
+
+.select-space {
+    margin-top: 70px;
+}
+
+.logo {
+    margin-left: 20px;
+}
+
+.power-pink {
+    color: #ed008c;
+    font-size: 37px;
+}
+
+.table-text {
+    color: #262163 !important;
+    font-style: italic;
+}
+
+.size-table {
+    font-size: 30px;
+    margin-left: 20px;
+}
+
+.navbar-color {
+    background-color: #cfcfcf;
+}
+
+.img-nav {
+    padding: 0;
+}
+
+.table-background {
+    background-color: #262163;
+    color: white;
+}
+
+.pagination {
+    display: inline-block;
+}
+
+.pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.pagination a.active {
+    background-color: #262163;
+    color: white;
+    border-radius: 5px;
+}
+
+.pagination a:hover:not(.active) {
+    background-color: #ddd;
+    border-radius: 5px;
+}
+
+.btn-pagination {
+    background-color: #262163;
+    color: white;
+    margin-top: -12px;
+    margin-left: -14px;
+    margin-right: -14px;
+    margin-bottom: -10px;
+}
+
+#menu * {
+    box-sizing: border-box;
+}
+
+#menu {
+    background: #cccccc;
+    padding: 0;
+    list-style-type: none;
+    font-family: arial;
+    font-size: 20px;
+    line-height: 1em;
+    margin: 0 -1px;
+    text-align: center;
+    height: 80px;
+    font-style: italic;
+
+}
+
+#menu li {
+    float: left;
+    padding: 30px 30px 0px 40px;
+    background-color: #cfcfcf;
+    color: #262163;
+    position: relative;
+    border-top: 1px solid #cfcfcf;
+    border-bottom: 1px solid #cfcfcf;
+    width: 260px;
+    margin: 0 1px;
+    height: 80px;
+}
+
+#menu li:before {
+    content: '';
+    border-left: 20px solid #fff;
+    border-top: 40px solid transparent;
+    border-bottom: 40px solid transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+}
+
+#menu li:after {
+    content: '';
+    border-left: 20px solid #cfcfcf;
+    border-top: 40px solid transparent;
+    border-bottom: 40px solid transparent;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    z-index: 20;
+}
+
+#menu li.active, #menu li:hover {
+    background: white;
+    color: #262163;
+}
+
+#menu li.active:after, #menu li:hover:after {
+    border-left-color: white;
+}
+
+#menu a {
+    color: #262163;
+    text-decoration: none;
+}
+
+#menu li:hover a, #menu li.active a {
+    color: #262163;;
 }

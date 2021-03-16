@@ -1,4 +1,5 @@
 <?php
+    include_once 'includes/functions.php';
     /** @var PDO $pdo */
     $accueil = true;
     include_once 'includes/header.php';
@@ -7,138 +8,207 @@
         $req = "SELECT * FROM client";
         $res = $pdo->query($req);
         $client = $res->fetchAll();
-        if (isset($_GET['idClient']) && isset($_GET['date_from']) && isset($_GET['date_to'])) {
+
+        $idGetClient = null;
+        $date_from = null;
+        $date_to = null;
+        $page = 1;
+        $a_paramQuerry = [
+            "idClient" => $idGetClient,
+            "date_from" => $date_from,
+            "date_to" => $date_to,
+        ];
+        $query = [];
+        $query2 = [];
+        $query[] = "SELECT s.*, c.name FROM service s JOIN client c ON s.client_id = c.id";
+        $query2[] = "SELECT COUNT(s.id) AS total FROM service s JOIN client c ON s.client_id = c.id";
+
+        if (isset($_GET['idClient']) && !empty($_GET['idClient'])) {
             $idGetClient = $_GET['idClient'];
-            $date_from = $_GET['date_from'];
-            $date_to = $_GET['date_to'];
+            $a_paramQuerry["idClient"] = $_GET['idClient'];
+            $query["where"] = "WHERE s.client_id = $idGetClient";
+            $query2["where"] = "WHERE s.client_id = $idGetClient";
         }
-        print_r($_SESSION);
+
+        if (isset($_GET['date_from']) && !empty($_GET['date_from'])) {
+            if (!isset($_GET['page'])) {
+                $date = $_GET['date_from'];
+                $date_from = convertDate($date, '%s-%s-%s');
+            } else {
+                $date_from = $_GET['date_from'];
+            }
+
+
+            $a_paramQuerry["date_from"] = $date_from;
+            if (array_key_exists("where", $query)) {
+                $query[] = "AND s.date >= '$date_from'";
+                $query2[] = "AND s.date >= '$date_from'";
+            } else {
+                $query["where"] = "WHERE s.date >= '$date_from'";
+                $query2["where"] = "WHERE s.date >= '$date_from'";
+
+            }
+        }
+        if (isset($_GET['date_to']) && !empty($_GET['date_to'])) {
+            if (!isset($_GET['page'])) {
+                $date = $_GET['date_to'];
+                $date_to = convertDate($date, '%s-%s-%s');
+            } else {
+                $date_to = $_GET['date_to'];
+            }
+
+            $a_paramQuerry["date_to"] = $date_to;
+            if (array_key_exists("where", $query)) {
+                $query[] = "AND s.date <= '$date_to'";
+                $query2[] = "AND s.date <= '$date_to' ";
+            } else {
+                $query["where"] = "WHERE s.date <= '$date_to'";
+                $query2["where"] = "WHERE s.date <= '$date_to'";
+            }
+        }
+
+        if (isset($_GET['page']) && !empty($_GET['page'])) {
+            $page = $_GET['page'];
+        }
+        $totalElement = (int)$pdo->query(implode(" ", $query2))->fetchColumn();
+        $nbPage = ceil($totalElement / 15);
+        $premier = ($page * 15) - 15;
+        $query[] = "LIMIT $premier, 15";
+        $res = $pdo->query(implode(" ", $query));
+        $service = $res->fetchAll();
         ?>
         <center>
+            <section class="background-home">
+                <br>
+                <div class="container-fluid">
+                    <form action="" method="get">
+                        <div class="row">
+                            <div class="col-3"></div>
+                            <div class="col-2">
+                                <select name="idClient" class="btn-round select-space form-control">
+                                    <option value="" selected>
+                                        Choisir un bénéficiaire
+                                    </option>
+                                    <?php
+                                        for ($i = 0; $i < count($client); $i++) {
+                                            $idClient = $client[$i]['id'];
+                                            $nameClient = $client[$i]['name'];
+                                            ?>
+                                            <option value="<?php echo $idClient ?>"><?php echo $nameClient ?></option>
+                                        <?php } ?>
+                                </select>
+                            </div>
+                            <div class="col-2">
+                                <input autocomplete="off" name="date_from" placeholder="Date de début"
+                                       class="select-space btn-round form-control datepicker" type="text">
+                            </div>
+                            <div class="col-2">
+                                <input autocomplete="off" name="date_to" placeholder="Date de fin"
+                                       class="select-space btn-round form-control datepicker" type="text">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-blue btn-round btn-index">RECHERCHER</button>
+                    </form>
+                    <br>
+            </section>
             <br>
-            <H2>Accueil</H2>
-        </center>
-        <div class="container-fluid">
-            <form action="" method="get">
-                <div class="row">
-                    <div class="col-4"></div>
-                    <div class="col-1">
-                        <p>Bénéficiaire</p>
-                    </div>
-                    <div class="col-2">
-                        <select name="idClient" class="form-control" required>
-                            <option selected>Choisir un bénéficiaire</option>
+            <br>
+            <?php if (isset($_GET['client']) || isset($_GET['date_from']) || isset($_GET['date_to']) || isset($_GET['page'])) { ?>
+                <table class="table table-striped w-50">
+                    <thead class="table-blue bold">
+                    <tr>
+                        <td width="1%">id</td>
+                        <td width="5%">Date</td>
+                        <td width="20%">Bénéficiaire</td>
+                        <td width="1%">Modifier</td>
+                        <td width="1%;">Supprimer</td>
+
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                    <?php for ($i = 0; $i < count($service); $i++) {
+                        ?>
+                        <tr class="table-text">
+                            <td class="bold">
+                                <?php
+                                    echo $service[$i]['id'];
+                                ?>
+                            </td>
+                            <td class="bold">
+                                <?php
+                                    $date = new DateTime($service[$i]['date']);
+
+                                ?>
+                                <?php echo $date->format('d/m/Y') ?>
+                            </td>
+                            <td class="bold">
+                                <?php
+                                    echo $service[$i]['name'];
+                                ?>
+                            </td>
+                            <td>
+                                <a href="updateService.php?id=<?php echo $service[$i]['id'] ?>">
+                                    <i class="size-table fas fa-pen-square"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="script/traitementDeleteService.php?id=<?php echo $service[$i]['id'] ?>">
+                                    <i class="size-table fas fa-trash"></i>
+                                </a>
+                            </td>
+
+                        </tr>
+                    <?php } ?>
+                    </tbody>
+                </table>
+                <br>
+                <?php $link_pagination = "/index.php?";
+
+                ?>
+                <div id="demo" class="pagination">
+                    <?php
+                        $pageRetour = $page - 10;
+                        $pageSuivant = $page + 10;
+                    ?>
+                    <a href="<?php
+                        echo $link_pagination . http_build_query($a_paramQuerry) . "&page=1" ?>">
+                        <button class="btn btn-pagination">Premier</button>
+                    </a>
+                    <a href="<?php
+                        echo $link_pagination . http_build_query($a_paramQuerry) . "&page=" . $pageRetour ?>">&laquo;</a>
+                    <?php for ($i = 1; $i < 11; $i++) {
+                        if ($page != 1) {
+                            ?>
+                            <a href="<?php echo $link_pagination . http_build_query($a_paramQuerry) . "&page=" . $page ?>" <?php if ($i == 1) { ?> class="active" <?php } ?>><?php echo $page ?></a>
                             <?php
-                                for ($i = 0; $i < count($client); $i++) {
-                                    $idClient = $client[$i]['id'];
-                                    $nameClient = $client[$i]['name'];
-                                    ?>
-                                    <option value="<?php echo $idClient ?>"><?php echo $nameClient ?></option>
-                                <?php } ?>
-                        </select>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-4"></div>
-                    <div class="col-1">
-                        <p>Date de début</p>
-                    </div>
-                    <div class="col-2">
-                        <input name="date_from" type="date" class="form-control" required>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-4"></div>
-                    <div class="col-1">
-                        <p>Date de fin</p>
-                    </div>
-                    <div class="col-2">
-                        <input name="date_to" type="date" class="form-control" required>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-6">
-                    </div>
-                    <div class="col-2">
-                        <button class="btn btn-primary btn-index">Rechercher</button>
-                    </div>
-                </div>
-
-            </form>
-            <div class="row">
-                <div class="col-6">
-                </div>
-                <div class="col-2">
-                    <a href="ajouterService.php">
-                        <button class="btn btn-primary btn-index">Nouvelle <br> prestation</button>
+                            $page++;
+                        } else {
+                            ?>
+                            <a href="<?php echo $link_pagination . http_build_query($a_paramQuerry) . "&page=" . $i ?>" <?php if ($page == $i) { ?> class="active" <?php } ?>><?php echo $i ?></a>
+                        <?php }
+                    } ?>
+                    <a href="<?php
+                        echo $link_pagination . http_build_query($a_paramQuerry) . "&page=" . $pageSuivant ?>">&raquo;</a>
+                    <a href="<?php
+                        echo $link_pagination . http_build_query($a_paramQuerry) . "&page=" . $nbPage ?>">
+                        <button class="btn btn-pagination">Dernier</button>
                     </a>
                 </div>
-            </div>
-            <?php
-                if (isset($idGetClient) && isset($date_from) && isset($date_to)) {
-//                $req = "SELECT *
-//                        FROM service
-//                        WHERE client_id = $idGetClient
-//                        AND date BETWEEN '$date_from'
-//                        AND '$date_to'";
-                    $req = sprintf("SELECT * 
-                        FROM service 
-                        WHERE client_id = %s 
-                        AND date BETWEEN '%s'
-                        AND '%s'", $idGetClient, $date_from, $date_to);
-                    $res = $pdo->query($req);
-                    $service = $res->fetchAll();
-                    $req = "SELECT name FROM client WHERE id = $idGetClient";
-                    $res = $pdo->query($req);
-                    $nameGetClient = $res->fetchColumn();
-                    ?>
-                    <center>
-                        <table class="table table-bordered w-50">
-                            <thead>
-                            <tr>
-                                <th width="1px;">Date</th>
-                                <th width="1px;">Client</th>
-                                <th width="1px;">Modifier</th>
-                                <th width="1px;">Supprimer</th>
+            <?php } ?>
+            <br>
+            <a href="ajouterService.php">
+                <button class="btn btn-pink btn-round btn-index">NOUVELLE PRESTATION</button>
+            </a>
+            <br>
 
-                            </tr>
-                            <?php for ($i = 0; $i < count($service); $i++) { ?>
-                                <tr>
-                                    <td>
-                                        <?php echo $service[$i]['date'] ?>
-                                    </td>
-                                    <td>
-                                        <?php echo $nameGetClient ?>
-                                    </td>
-                                    <td>
-                                        <a href="updateService.php?id=<?php echo $service[$i]['id'] ?>">
-                                            <i class="fas fa-pen-square"></i>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="script/traitementDeleteService.php?id=<?php echo $service[$i]['id'] ?>">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
-                                    </td>
-
-                                </tr>
-                            <?php } ?>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </center>
-                    <?php
-                }
-            ?>
-
+            <br>
+        </center>
         </div>
-
+        <script>
+        </script>
         <?php
         include_once 'includes/footer.php';
     } else {
-        header('Location: /edsa-s-report/authentification.php');
+        header('Location: /authentification.php');
     }
