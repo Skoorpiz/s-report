@@ -1,6 +1,7 @@
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link rel="icon" href="/images/favicon.ico" />
 <!------ Include the above in your HEAD tag ---------->
 
 <style>
@@ -93,7 +94,7 @@
         <div class="col-lg-4 col-md-3 col-sm-2"></div>
         <div class="col-lg-4 col-md-6 col-sm-8">
             <div class="logo">
-                <img src="/edsa-s-report/images/syga_logo.gif" alt="Logo">
+                <img src="/images/syga_logo.gif" alt="Logo">
             </div>
             <div class="row loginbox">
                 <div class="col-lg-12">
