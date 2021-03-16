@@ -1,4 +1,5 @@
 <?php
+    $prestation = true;
     include_once 'includes/header.php';
     if (isset($user)) {
         include_once 'includes/bdd.php';

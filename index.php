@@ -1,6 +1,6 @@
 <?php
     /** @var PDO $pdo */
-
+    $accueil = true;
     include_once 'includes/header.php';
     if (isset($user)) {
         include_once 'includes/bdd.php';
@@ -12,6 +12,7 @@
             $date_from = $_GET['date_from'];
             $date_to = $_GET['date_to'];
         }
+        print_r($_SESSION);
         ?>
         <center>
             <br>
