@@ -1,7 +1,8 @@
 <?php
-    include_once '../includes/header.php';
+    include_once 'includes/header.php';
+    print_r($_SESSION);
     if (isset($user)) {
-        include_once '../includes/bdd.php';
+        include_once 'includes/bdd.php';
         $idService = $_GET['id'];
         if (isset($_POST)) {
             $valueService = $_POST;

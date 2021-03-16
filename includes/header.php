@@ -1,5 +1,5 @@
 <?php session_start();
-$user = $_SESSION['user'];
+    $user = $_SESSION['user'];
 ?>
 <!DOCTYPE html>
 <!--
@@ -33,13 +33,13 @@ and open the template in the editor.
     </a>
     <ul class="navbar-nav">
         <li class="nav-item active">
-            <a class="nav-link" href="/edsa-s-report/index.php">Accueil</a>
+            <a <?php if (isset($accueil)) { ?> class="nav-link bold" <?php } else { ?> class="nav-link" <?php } ?> href="/edsa-s-report/index.php">Accueil</a>
         </li>
         <li class="nav-item active">
-            <a class="nav-link" href="#">Prestations</a>
+            <a <?php if (isset($prestation)) { ?> class="nav-link bold" <?php } else { ?> class="nav-link" <?php } ?> href="/edsa-s-report/ajouterService.php">Prestations</a>
         </li>
         <li class="nav-item active">
-            <a class="nav-link" href="#">Stats</a>
+            <a <?php if (isset($stats)) { ?> class="nav-link bold" <?php } else { ?> class="nav-link" <?php } ?> href="/edsa-s-report/statistique.php">Stats</a>
         </li>
         <li class="nav-item active">
             <a class="nav-link" href="#">Outils</a>
