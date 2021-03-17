@@ -34,13 +34,17 @@ and open the template in the editor.
     <link rel="icon" href="/images/favicon.ico" />
 </head>
 <nav class="navbar navbar-expand-sm navbar-color navbar-light img-nav">
+    <ul class="navbar-color" id="header" class="navbar-nav">
 
+    <li class="nav-item">
+        <a class="navbar-brand" href="/index.php">
+            <img class="center-text logo" src="/images/syga_logo.gif" alt="Logo"">
+        </a>
+    </li>
+    </ul>
     <ul class="navbar-color" id="menu" class="navbar-nav">
-        <li class="nav-item">
-            <a class="navbar-brand" href="/index.php">
-                <img class="center-text logo" src="/images/syga_logo.gif" alt="Logo"">
-            </a>
-        </li>
+        <span class="header">
+
         <li class="<?php if ($accueil == true) { ?> active <?php } ?> nav-item ">
             <a class=" nav-link bold " href="/index.php">Rechercher</a>
         </li>
@@ -56,6 +60,7 @@ and open the template in the editor.
         <li class="nav-item ">
             <a class="nav-link bold" href="#">Outils</a>
         </li>
+        </span>
     </ul>
     <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
         <ul class="navbar-nav">

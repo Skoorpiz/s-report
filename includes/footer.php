@@ -10,14 +10,13 @@
             dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
             dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
             dayNamesMin: ['Di','Lu','Ma','Me','Je','Ve','Sa'],
-            dateFormat: 'dd-mm-yy',
+            dateFormat: 'dd/mm/yy',
             firstDay: 1,
         };
         $.datepicker.setDefaults($.datepicker.regional['fr']);
     });
     $(function () {
         $(".datepicker").datepicker({
-            dateFormat: 'dd/mm/yy'
         });
     });
 </script>
