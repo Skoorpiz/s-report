@@ -227,3 +227,70 @@ legend.custom-border {
 #menu li:hover a, #menu li.active a {
     color: #262163;;
 }
+#header * {
+    box-sizing: border-box;
+}
+
+#header {
+    background: #cccccc;
+    padding: 0;
+    list-style-type: none;
+    font-family: arial;
+    font-size: 20px;
+    line-height: 1em;
+    margin: 0 -1px;
+    text-align: center;
+    height: 80px;
+    font-style: italic;
+
+}
+
+#header li {
+    float: left;
+    padding: 30px 30px 0px 40px;
+    background-color: #cfcfcf;
+    color: #262163;
+    position: relative;
+    border-top: 1px solid #cfcfcf;
+    border-bottom: 1px solid #cfcfcf;
+    width: 260px;
+    margin: 0 1px;
+    height: 80px;
+}
+
+#header li:before {
+    content: '';
+    border-left: 20px solid #fff;
+    border-top: 40px solid transparent;
+    border-bottom: 40px solid transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+}
+
+#header li:after {
+    content: '';
+    border-left: 20px solid #cfcfcf;
+    border-top: 40px solid transparent;
+    border-bottom: 40px solid transparent;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    z-index: 20;
+}
+
+#header li.active, #menu li:hover {
+    background: white;
+    color: #262163;
+}
+
+#header li.active:after, #menu li:hover:after {
+    border-left-color: white;
+}
+
+#header a {
+    color: #262163;
+    text-decoration: none;
+}
+

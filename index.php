@@ -163,39 +163,53 @@
                     </tbody>
                 </table>
                 <br>
-                <?php $link_pagination = "/index.php?";
+                <?php
+                if ($nbPage != 1) {
 
-                ?>
-                <div id="demo" class="pagination">
-                    <?php
-                        $pageRetour = $page - 10;
-                        $pageSuivant = $page + 10;
+                    $link_pagination = "/index.php?";
+
                     ?>
-                    <a href="<?php
-                        echo $link_pagination . http_build_query($a_paramQuerry) . "&page=1" ?>">
-                        <button class="btn btn-pagination">Premier</button>
-                    </a>
-                    <a href="<?php
-                        echo $link_pagination . http_build_query($a_paramQuerry) . "&page=" . $pageRetour ?>">&laquo;</a>
-                    <?php for ($i = 1; $i < 11; $i++) {
-                        if ($page != 1) {
-                            ?>
-                            <a href="<?php echo $link_pagination . http_build_query($a_paramQuerry) . "&page=" . $page ?>" <?php if ($i == 1) { ?> class="active" <?php } ?>><?php echo $page ?></a>
-                            <?php
-                            $page++;
-                        } else {
-                            ?>
-                            <a href="<?php echo $link_pagination . http_build_query($a_paramQuerry) . "&page=" . $i ?>" <?php if ($page == $i) { ?> class="active" <?php } ?>><?php echo $i ?></a>
-                        <?php }
-                    } ?>
-                    <a href="<?php
-                        echo $link_pagination . http_build_query($a_paramQuerry) . "&page=" . $pageSuivant ?>">&raquo;</a>
-                    <a href="<?php
-                        echo $link_pagination . http_build_query($a_paramQuerry) . "&page=" . $nbPage ?>">
-                        <button class="btn btn-pagination">Dernier</button>
-                    </a>
-                </div>
-            <?php } ?>
+                    <div id="demo" class="pagination">
+                        <?php
+                            $pageRetour = $page - 1;
+                            $pageSuivant = $page + 1;
+                        ?>
+
+                        <a href="<?php
+                            echo $link_pagination . http_build_query($a_paramQuerry) . "&page=1" ?>">
+                            <button class="btn btn-pagination">Premier</button>
+                        </a>
+                        <a href="<?php
+                            echo $link_pagination . http_build_query($a_paramQuerry) . "&page=" . $pageRetour ?>">&laquo;</a>
+                        <?php if ($nbPage > 10) { ?>
+                            <?php for ($i = 1; $i < 11; $i++) {
+                                if ($page != 1) {
+                                    if ($page <= $nbPage) {
+                                        ?>
+                                        <a href="<?php echo $link_pagination . http_build_query($a_paramQuerry) . "&page=" . $page ?>" <?php if ($i == 1) { ?> class="active" <?php } ?>><?php echo $page ?></a>
+                                        <?php
+                                        $page++;
+                                    }
+                                } else {
+                                    ?>
+                                    <a href="<?php echo $link_pagination . http_build_query($a_paramQuerry) . "&page=" . $i ?>" <?php if ($page == $i) { ?> class="active" <?php } ?>><?php echo $i ?></a>
+                                <?php }
+                            }
+                        } else { ?>
+                            <?php for ($i = 1; $i <= $nbPage; $i++) {
+                                ?>
+                                <a href="<?php echo $link_pagination . http_build_query($a_paramQuerry) . "&page=" . $i ?>" <?php if ($page == $i) { ?> class="active" <?php } ?>><?php echo $i ?></a>
+                            <?php }
+                        } ?>
+                        <a href="<?php
+                            echo $link_pagination . http_build_query($a_paramQuerry) . "&page=" . $pageSuivant ?>">&raquo;</a>
+                        <a href="<?php
+                            echo $link_pagination . http_build_query($a_paramQuerry) . "&page=" . $nbPage ?>">
+                            <button class="btn btn-pagination">Dernier</button>
+                        </a>
+                    </div>
+                <?php }
+            } ?>
             <br>
             <a href="ajouterService.php">
                 <button class="btn btn-pink btn-round btn-index">NOUVELLE PRESTATION</button>
@@ -205,8 +219,6 @@
             <br>
         </center>
         </div>
-        <script>
-        </script>
         <?php
         include_once 'includes/footer.php';
     } else {
