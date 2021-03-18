@@ -111,6 +111,9 @@
         AND context_id = $idContext ";
                     $res = $pdo->query($req);
                     $categories = $res->fetchAll();
+                    $totalMonth = [];
+                    $total = 0;
+                    $totalVol = [];
                     ?>
                     <br>
                     <H4><?php echo $nameContext ?></H4>
@@ -143,7 +146,7 @@
                             $entities = $res->fetchAll();
                             $sousTotalMonth = [];
                             $sousTotalCategory = 0;
-                            $volCategory = 0;
+                            $volCategory = [];
                             $ecartCategory = 0;
                             ?>
                             <tr>
@@ -154,10 +157,9 @@
                             </tr>
                             <?php for ($n = 0; $n < count($entities); $n++) {
                                 $sousTotalEntity = 0;
-                                $volEntity = 0;
                                 $ecartEntity = 0;
                                 $value = [];
-
+                                $volEntity = [];
                                 ?>
                                 <tr>
                                     <td>
@@ -167,23 +169,21 @@
                                     <?php
                                         for ($b = 1; $b <= count($month); $b++) {
                                             if (date("Y") == $yearGet && $b > $currentMonth) {
-                                                $value[$i][$n][$b] = 0;
+                                                $value[$j][$i][$n][$b] = 0;
                                             } else {
-                                                $value[$i][$n][$b] = rand(0, 10);
+                                                $value[$j][$i][$n][$b] = rand(0, 10);
                                             }
-                                            $sousTotalEntity += $value[$i][$n][$b];
-                                            $volEntity = $sousTotalEntity - $value[$i][$n][1];
-                                            $ecartEntity = $sousTotalEntity - $volEntity;
+                                            $sousTotalEntity += $value[$j][$i][$n][$b];
                                             $projectionEntity = ($sousTotalEntity / $currentMonth) * 12;
-                                            if (!array_key_exists($b, $sousTotalMonth)) {
-                                                $sousTotalMonth[$b] = $value[$i][$n][$b];
-                                            } else {
-                                                $sousTotalMonth[$b] = $sousTotalMonth[$b] + $value[$i][$n][$b];
-                                            }
+                                            $volEntity[$j][$i][$n] = $projectionEntity + random_int(-2, 5);
+                                            $ecartEntity = $projectionEntity - $volEntity[$j][$i][$n];
+                                            $sousTotalMonth[$j][$i][$b] += $value[$j][$i][$n][$b];
 
                                             ?>
-                                            <td><?php echo $value[$i][$n][$b] ?></td>
-                                        <?php } ?>
+                                            <td><?php echo $value[$j][$i][$n][$b] ?></td>
+                                        <?php }
+                                        $volCategory[$j][$i] += $volEntity[$j][$i][$n];
+                                    ?>
                                     <td></td>
                                     <td><?php echo $sousTotalEntity; ?></td>
                                     <?php if (date("Y") == $yearGet) { ?>
@@ -192,7 +192,7 @@
                                         <td><?php echo $sousTotalEntity; ?></td>
                                     <?php } ?>
                                     <td></td>
-                                    <td><?php echo $volEntity; ?></td>
+                                    <td><?php echo $volEntity[$j][$i][$n]; ?></td>
                                     <td><?php echo $ecartEntity; ?></td>
                                 </tr>
 
@@ -203,19 +203,15 @@
                                     Sous-total
                                 </td>
                                 <?php for ($b = 1; $b <= count($month); $b++) {
-                                    $sousTotalCategory += $sousTotalMonth[$b];
-                                    $volCategory = $sousTotalCategory - $sousTotalMonth[1];
-                                    $ecartCategory = $sousTotalCategory - $volCategory;
-                                    $projectionSousTotal = ($sousTotalCategory / $currentMonth) * 12;
-                                    if (!array_key_exists($b, $totalMonth)) {
-                                        $totalMonth[$b] = $sousTotalMonth[$b];
-                                    } else {
-                                        $totalMonth[$b] = $totalMonth[$b] + $sousTotalMonth[$b];
-                                    }
+                                    $sousTotalCategory += $sousTotalMonth[$j][$i][$b];
 
+                                    $projectionSousTotal = ($sousTotalCategory / $currentMonth) * 12;
+                                    $ecartCategory = $projectionSousTotal - $volCategory[$j][$i];
+                                    $totalMonth[$j][$b] += $sousTotalMonth[$j][$i][$b];
                                     ?>
-                                    <td><?php echo $sousTotalMonth[$b] ?></td>
-                                <?php } ?>
+                                    <td><?php echo $sousTotalMonth[$j][$i][$b] ?></td>
+                                <?php } $totalVol[$j] += $volCategory[$j][$i];
+                                ?>
                                 <td></td>
                                 <td><?php echo $sousTotalCategory ?></td>
                                 <?php if (date("Y") == $yearGet) { ?>
@@ -224,7 +220,7 @@
                                     <td><?php echo $sousTotalCategory; ?></td>
                                 <?php } ?>
                                 <td></td>
-                                <td><?php echo $volCategory ?></td>
+                                <td><?php echo $volCategory[$j][$i] ?></td>
                                 <td><?php echo $ecartCategory ?></td>
 
                             </tr>
@@ -235,12 +231,11 @@
                                 Total
                             </td>
                             <?php for ($b = 1; $b <= count($month); $b++) {
-                                $total += $totalMonth[$b];
-                                $totalVol = $total - $totalMonth[1];
-                                $totalEcart = $total - $totalVol;
+                                $total += $totalMonth[$j][$b];
                                 $projectionTotal = ($total / $currentMonth) * 12;
+                                $totalEcart = $projectionTotal - $totalVol[$j];
                                 ?>
-                                <td><?php echo $totalMonth[$b] ?></td>
+                                <td><?php echo $totalMonth[$j][$b] ?></td>
                             <?php } ?>
                             <td></td>
                             <td><?php echo $total; ?></td>
@@ -250,7 +245,7 @@
                                 <td><?php echo $total; ?></td>
                             <?php } ?>
                             <td></td>
-                            <td><?php echo $totalVol ?></td>
+                            <td><?php echo $totalVol[$j] ?></td>
                             <td><?php echo $totalEcart ?></td>
                         </tr>
                         </tbody>
@@ -300,6 +295,9 @@
         AND context_id = $idContext ";
                         $res = $pdo->query($req);
                         $categories = $res->fetchAll();
+                        $volCategory = [];
+                        $total = [];
+                        $totalMonth = [];
                         ?>
                         <br>
                         <H4><?php echo $nameContext ?></H4>
@@ -330,10 +328,8 @@
                                      $i < count($categories);
                                      $i++) {
                                     $sousTotalCategory = 0;
-                                    $volCategory = 0;
                                     $ecartCategory = 0;
                                     $value = [];
-                                    $projection = 0;
                                     ?>
                                     <tr>
                                         <th class="table-background">
@@ -349,21 +345,21 @@
                                             for ($b = 1; $b <= count($month); $b++) {
 
                                                 if (date("Y") == $yearGet && $b > $currentMonth) {
-                                                    $value[$i][$b] = 0;
+                                                    $value[$j][$i][$b] = 0;
                                                 } else {
-                                                    $value[$i][$b] = rand(0, 10);
+                                                    $value[$j][$i][$b] = rand(0, 10);
                                                 }
-                                                $sousTotalCategory += $value[$i][$b];
-                                                $volCategory = $sousTotalCategory - $value[$i][1];
-                                                $ecartCategory = $sousTotalCategory - $volCategory;
+                                                $sousTotalCategory += $value[$j][$i][$b];
                                                 $projectionCategory = ($sousTotalCategory / $currentMonth) * 12;
-                                                if (!array_key_exists($b, $totalMonth)) {
-                                                    $totalMonth[$b] = $value[$i][$b];
+                                                $volCategory[$j][$i] = $projectionCategory + random_int(-2, 5);
+                                                $ecartCategory = $projectionCategory - $volCategory[$j][$i];
+                                                if (!array_key_exists($j, $totalMonth)) {
+                                                    $totalMonth[$j][$b] = $value[$j][$i][$b];
                                                 } else {
-                                                    $totalMonth[$b] = $totalMonth[$b] + $value[$i][$b];
+                                                    $totalMonth[$j][$b] = $totalMonth[$j][$b] + $value[$j][$i][$b];
                                                 }
                                                 ?>
-                                                <td><?php echo $value[$i][$b]; ?></td>
+                                                <td><?php echo $value[$j][$i][$b]; ?></td>
                                             <?php } ?>
                                         <td></td>
                                         <td><?php echo $sousTotalCategory; ?></td>
@@ -373,7 +369,7 @@
                                             <td><?php echo $sousTotalCategory; ?></td>
                                         <?php } ?>
                                         <td></td>
-                                        <td><?php echo $volCategory; ?></td>
+                                        <td><?php echo $volCategory[$j][$i]; ?></td>
                                         <td><?php echo $ecartCategory; ?></td>
                                     </tr>
                                 <?php } ?>
@@ -383,19 +379,21 @@
                                 </td>
                                 <?php
                                     for ($b = 1; $b <= count($month); $b++) {
-                                        $total += $totalMonth[$b];
-                                        $totalVol = $total - $totalMonth[1];
-                                        $totalEcart = $total - $totalVol;
-                                        $projectionTotal = ($total / $currentMonth) * 12;
+                                        $total[$j] += $totalMonth[$j][$b];
+
+
+                                        $projectionTotal = ($total[$j] / $currentMonth) * 12;
+                                        $totalVol = array_sum($volCategory[$j]);
+                                        $totalEcart = $projectionTotal - $totalVol;
                                         ?>
-                                        <td><?php echo $totalMonth[$b]; ?></td>
+                                        <td><?php echo $totalMonth[$j][$b]; ?></td>
                                     <?php } ?>
                                 <td></td>
-                                <td><?php echo $total; ?></td>
+                                <td><?php echo $total[$j]; ?></td>
                                 <?php if (date("Y") == $yearGet) { ?>
                                     <td><?php echo $projectionTotal; ?></td>
                                 <?php } else { ?>
-                                    <td><?php echo $total; ?></td>
+                                    <td><?php echo $total[$j]; ?></td>
                                 <?php } ?>
                                 <td></td>
                                 <td><?php echo $totalVol ?></td>
